@@ -1,0 +1,85 @@
+""" Sean Lambert
+My first Python project (Not done)
+This is part one of an electrical engineering calculator. This is designed to solve series circuit problems by entering the known values you have and producing the 3rd value based on known currents.
+This verison only solves total V and you have to do R and I in that extact order
+I undertand there is some logic errors and redundancy.
+
+"""
+
+ Lists used for storing the values entered in. I know that using lists for single values may not be the best thing to do, but I was trying to avoid global variables.
+resistorTotal = []
+currentTotal = []
+voltageTotal = []
+ohmsLawVal = []
+RT = []
+VT = []
+
+# First Function checks The values and does the equations if we have 2/3 values needed
+def check_Value():
+    while len(ohmsLawVal) == 2:  # Checking to see if we have 2/3 values, end the program and output the final value!
+        if 'r' in ohmsLawVal and 'i' in ohmsLawVal:  # If we have I and R entered in, then use V=I*R 
+            ohmV = [currentTotal[0] * RT[0]]  # Since these are in a list with only one number, we use index[0] to grab the first and only value.
+            print(f"VT: {ohmV}")  # V=I*R 
+            break
+        elif 'i' in ohmsLawVal and 'v' in ohmsLawVal:
+            ohmR = [currentTotal[0] * RT[0]]
+            print(f"RT: {ohmR}")
+            break
+        elif 'v' in ohmsLawVal and 'r' in ohmsLawVal:
+            ohmI = [voltageTotal[0] / r for r in RT]
+            print(f"IT: {ohmI}")
+            break
+    if len(ohmsLawVal) == 2:  # Have this here to print out RT. NEEDS TO BE OPTIMIZED
+        print(f"RT: {RT}")
+
+# Second function does most of the work. Pretty much the main UI, it collects and stores the input into the lists, prints out the values.
+def series_calc():
+    # This is for resistance. Since in ohms law and series circuits, we get the VT by adding all individual resistances
+    seriesValue = input("--Please Enter Known Value-- \n ---Press N when done--- \n[r] \n[i] \n[v] \nChoice: ")
+    if seriesValue.lower() == 'r':
+        resistor = float(input(f"Resistor Value: "))
+        resistorTotal.append(resistor)
+        print(f"RT: {resistor}")
+        stopFunc = input("Done: Y/N: ")  # Use this to stop taking input or continue if we want
+
+    while stopFunc == 'n':  # Had to use a while loop to keep adding in resistor values if need be
+        resistor = float(input(f"Resistor Value: "))
+        resistorTotal.append(resistor)
+        stopFunc = input("Done: Y/N: ")
+
+    if stopFunc.lower() == 'y':
+        ohmsLawVal.append('r')
+        RTT = sum(resistorTotal)
+        RT.append(RTT)
+        print(f'RT: {RT}')
+        resistorSeriesCounter = 0
+        zeroBaseResistor = 0
+    for r in resistorTotal:  # For loop to keep track of every resistor we enter in
+        resistorSeriesCounter += 1
+        print(f'R{resistorSeriesCounter}: {r}')
+    check_Value()  # Call the function to see if we have the values in ohmsLawVal
+
+    # This is for current
+    seriesValue = input("--Please Enter Known Value-- \n ---Press N when done--- \n[i] \n[v] \nChoice: ")
+    if seriesValue.lower() == 'i':
+        current = float(input("Please Enter I: "))
+        currentTotal.append(current)
+        print(f"IT: {currentTotal}")
+        ohmsLawVal.append('i')
+        check_Value()
+
+    # This is for Voltage
+    seriesValue = input("--Please Enter Known Value-- \n ---Press N when done---")
+    if seriesValue.lower() == 'v':
+        voltage = float(input("Vt: "))
+        voltageTotal.append(voltage)
+        check_Value()
+        print(voltageTotal)
+        ohmsLawVal.append('v')
+        check_Value()
+
+print("Welcome To series Calculator")
+
+while len(ohmsLawVal) < 2:  # NEEDS TO BE OPTIMIZED
+    check_Value()
+    series_calc()
