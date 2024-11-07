@@ -1,4 +1,4 @@
-
+#This project is still in the works. There is of course some errors
 
 Electrical Engineering Series Circuit Calculator
 This is a simple Python-based calculator designed to solve problems involving series circuits in electrical engineering. The program uses Ohm's Law to calculate unknown values (voltage, current, or resistance) based on the known values you provide. You can input two out of the three values (resistance, current, or voltage), and the program will calculate the missing third value.
